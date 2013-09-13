@@ -35,7 +35,8 @@ class TestFlightUploadTask extends DefaultTask {
     @Input String teamToken
     @Input String notes
     @Input List<String> distributionLists
-    @Input Boolean notify
+    @Input Boolean notify = false
+    @Input Boolean replace = false
 
     @TaskAction
     void upload() {
@@ -49,8 +50,13 @@ class TestFlightUploadTask extends DefaultTask {
             entity.addPart('team_token', new StringBody(teamToken))
             entity.addPart('notes', new StringBody(notes))
             entity.addPart('distribution_lists', new StringBody(distributionLists.join(',')))
-            entity.addPart('notify', new StringBody(notify ? 'True' : 'False'))
+            entity.addPart('notify', new StringBody(booleanToString(notify)))
+            entity.addPart('replace', new StringBody(booleanToString(replace)))
             req.entity = entity
         }
+    }
+
+    def booleanToString(def property) {
+        property ? 'True' : 'False'
     }
 }
